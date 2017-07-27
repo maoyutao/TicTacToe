@@ -43,8 +43,8 @@ export function placePiece(num:number,side:typeOfChessman):boolean
 function isFull():boolean
 {
     let i:number = 1;
-    for( i =1;i<=10; i++) {
-        if(chessboard[i] === ' ') {
+    for( i =1;i<=9; i++) {
+        if(chesspieces[i] === ' ') {
             break;
         }
     }
@@ -106,38 +106,52 @@ export function getProbability(side:typeOfChessman)
     function s([win,lose,draw]:number[],place:number,m_side:typeOfChessman,probability:number):number[]
     {
         probability *= (1/getRemainingPiece())
+//       console.log('走下面这步的概率为'+probability)
+//        console.log(`在${place}假装走棋`)
         placePiece(place,m_side)
         if(isWin(side)) {
+//            console.log("结束了，是赢的")
             chesspieces[place] = ' '
+ //           console.log("收回"+place+"的棋子")
             return [win+probability, lose, draw]
         }
         else if(isWin(theOther)) {
+//            console.log("结束了，是输的")
             chesspieces[place] = ' '
-            return [win, lose+probability, draw]
+ //           console.log("收回"+place+"的棋子")
+          return [win, lose+probability, draw]
         }
         else if(isFull())  {
+ //           console.log("结束了，平局")
             chesspieces[place] = ' '
+ //           console.log("收回"+place+"的棋子")
             return [win, lose, draw+probability]
         }
         else  {
+//            console.log("没结束"+change(m_side)+"走棋")
             for(let t=1; t<=9; t++) {
-                if(chesspieces[t] !== ' ') continue
+                if(chesspieces[t] !== ' ') {
+                    continue
+                }
                 [win,lose,draw] = s([win,lose,draw],t,change(m_side),probability)
             }
+            chesspieces[place] = ' '
+ //           console.log("收回"+place+"的棋子")
             return [win,lose,draw]
         }
         
     }
-    
+
     let theOther:typeOfChessman = change(side)
     let [win,lose,draw]:number[] = []
     for(let i=1; i<=9; i++) {
         if(chesspieces[i] !== ' ') {
             continue
         }
-        [win,lose,draw] = s([0,0,0],i,side,1)
+        [win,lose,draw] = s([0,0,0],i,side,getRemainingPiece())
         console.log(
         `在${i}号位置下棋的胜率为${win},败率为${lose}，平局的概率为${draw}`)
     }
 
 }
+

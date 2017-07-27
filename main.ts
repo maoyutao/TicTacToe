@@ -28,7 +28,6 @@ if(Math.random()>0.5) {
     console.log("您先下")
 }else {
     console.log("电脑先下")
-    getProbability('x')
     ComputerPlayer.changeState()
     ComputerPlayer.randomPlace()
     outPutChessboard();
@@ -38,6 +37,7 @@ async function main() {
 while(1)
 {
     console.log("您下棋")
+    getProbability('o')
     HumanPlayer.changeState()
 
     while(HumanPlayer.state) {  
@@ -53,7 +53,6 @@ while(1)
         break
     }
     console.log("电脑下棋")
-    getProbability('x')
     ComputerPlayer.changeState()
     ComputerPlayer.randomPlace()
     outPutChessboard();
