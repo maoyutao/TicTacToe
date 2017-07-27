@@ -1,5 +1,5 @@
 import {humanPlayer, computerPlayer} from "./player"
-import {outPutChessboard,isOver} from "./chessboard"
+import {outPutChessboard, isOver, getProbability} from "./chessboard"
 
 declare function require(path: string):any;
 
@@ -28,6 +28,7 @@ if(Math.random()>0.5) {
     console.log("您先下")
 }else {
     console.log("电脑先下")
+    getProbability('x')
     ComputerPlayer.changeState()
     ComputerPlayer.randomPlace()
     outPutChessboard();
@@ -52,6 +53,7 @@ while(1)
         break
     }
     console.log("电脑下棋")
+    getProbability('x')
     ComputerPlayer.changeState()
     ComputerPlayer.randomPlace()
     outPutChessboard();

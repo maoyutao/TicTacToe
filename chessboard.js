@@ -36,19 +36,19 @@ function placePiece(num, side) {
     }
 }
 exports.placePiece = placePiece;
-function isOver() {
-    function isFull() {
-        let i = 1;
-        for (i = 1; i <= 10; i++) {
-            if (chessboard[i] === ' ') {
-                break;
-            }
+function isFull() {
+    let i = 1;
+    for (i = 1; i <= 10; i++) {
+        if (chessboard[i] === ' ') {
+            break;
         }
-        if (i === 10)
-            return true;
-        else
-            return false;
     }
+    if (i === 10)
+        return true;
+    else
+        return false;
+}
+function isOver() {
     if (isWin('o')) {
         init();
         return [true, "游戏结束，o方胜利"];
@@ -79,3 +79,51 @@ function isWin(side) {
         return false;
     }
 }
+function getProbability(side) {
+    function change(now) {
+        return (now === 'o') ? 'x' : 'o';
+    }
+    function getRemainingPiece() {
+        let result = 0;
+        for (let k = 1; k <= 9; k++) {
+            if (chesspieces[k] === ' ') {
+                result++;
+            }
+        }
+        return result;
+    }
+    function s([win, lose, draw], place, m_side, probability) {
+        probability *= (1 / getRemainingPiece());
+        placePiece(place, m_side);
+        if (isWin(side)) {
+            chesspieces[place] = ' ';
+            return [win + probability, lose, draw];
+        }
+        else if (isWin(theOther)) {
+            chesspieces[place] = ' ';
+            return [win, lose + probability, draw];
+        }
+        else if (isFull()) {
+            chesspieces[place] = ' ';
+            return [win, lose, draw + probability];
+        }
+        else {
+            for (let t = 1; t <= 9; t++) {
+                if (chesspieces[t] !== ' ')
+                    continue;
+                [win, lose, draw] = s([win, lose, draw], t, change(m_side), probability);
+            }
+            return [win, lose, draw];
+        }
+    }
+    let theOther = change(side);
+    let [win, lose, draw] = [];
+    for (let i = 1; i <= 9; i++) {
+        if (chesspieces[i] !== ' ') {
+            continue;
+        }
+        [win, lose, draw] = s([0, 0, 0], i, side, 1);
+        console.log(`在${i}号位置下棋的胜率为${win},败率为${lose}，平局的概率为${draw}`);
+    }
+}
+exports.getProbability = getProbability;

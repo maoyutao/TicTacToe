@@ -31,9 +31,10 @@ if (Math.random() > 0.5) {
 }
 else {
     console.log("电脑先下");
+    chessboard_1.getProbability('x');
     ComputerPlayer.changeState();
     ComputerPlayer.randomPlace();
-    chessboard_1.outPutChessboard(); 
+    chessboard_1.outPutChessboard();
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -52,6 +53,7 @@ function main() {
                 break;
             }
             console.log("电脑下棋");
+            chessboard_1.getProbability('x');
             ComputerPlayer.changeState();
             ComputerPlayer.randomPlace();
             chessboard_1.outPutChessboard();
