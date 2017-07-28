@@ -44,7 +44,9 @@ class computerPlayer extends player {
     }
     intelligencePlace() {
         if (this.state) {
-            while (!chessboard_1.placePiece(chessboard_1.outputProbability(this.side, 2), this.side)) { }
+            let [bestplace, numberOfBestplace] = chessboard_1.outputProbability(this.side, 2);
+            let finalPlace = Math.floor(Math.random() * numberOfBestplace);
+            chessboard_1.placePiece(bestplace[finalPlace], this.side);
             this.changeState();
         }
     }

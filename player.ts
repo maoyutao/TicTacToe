@@ -45,7 +45,9 @@ export class computerPlayer extends player
     intelligencePlace()
     {
         if(this.state) {
-            while (!placePiece(outputProbability(this.side,2),this.side)){}
+            let [bestplace,numberOfBestplace] =outputProbability(this.side,2)
+            let finalPlace = Math.floor(Math.random()*numberOfBestplace)
+            placePiece(bestplace[finalPlace],this.side)
             this.changeState()
         }
     }

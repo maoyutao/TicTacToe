@@ -79,131 +79,130 @@ function isWin(side) {
         return false;
     }
 }
-//只是返回另一个  没改变  等下再换名字
-function change(now) {
+function getOpponent(now) {
     return (now === 'o') ? 'x' : 'o';
 }
-function getRemainingPiece() {
+function getRemainingPieceOfPossiblePlace(possiblePlace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
     let result = 0;
-    for (let k = 1; k <= 9; k++) {
-        if (chesspieces[k] === ' ') {
+    for (let t = 1; t <= possiblePlace.length; t++) {
+        if (chesspieces[possiblePlace[t]] === ' ') {
             result++;
         }
     }
     return result;
 }
 //计算side走在place处的输赢概率 
-function getProbability1([win, lose, draw], place, m_side, probability, side) {
-    probability *= (1 / getRemainingPiece());
-    //      console.log('走下面这步的概率为'+probability)
-    //       console.log(`在${place}假装走棋`)
+function getProbability([win, lose, draw], place, m_side, probability, side, possiblePlace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+    if (m_side === side) {
+        probability *= (1 / getRemainingPieceOfPossiblePlace());
+    }
+    else {
+        probability *= (1 / getRemainingPieceOfPossiblePlace(possiblePlace));
+    }
+           console.log('走下面这步的概率为'+probability)
+           console.log(`在${place}假装走棋`)
     placePiece(place, m_side);
     if (isWin(side)) {
-        //           console.log("结束了，是赢的")
+                    console.log("结束了，是赢的")
         chesspieces[place] = ' ';
-        //           console.log("收回"+place+"的棋子")
+                    console.log("收回"+place+"的棋子")
         return [win + probability, lose, draw];
     }
-    else if (isWin(change(side))) {
-        //           console.log("结束了，是输的")
+    else if (isWin(getOpponent(side))) {
+                    console.log("结束了，是输的")
         chesspieces[place] = ' ';
-        //          console.log("收回"+place+"的棋子")
+                   console.log("收回"+place+"的棋子")
         return [win, lose + probability, draw];
     }
     else if (isFull()) {
-        //          console.log("结束了，平局")
+                    console.log("结束了，平局")
         chesspieces[place] = ' ';
-        //          console.log("收回"+place+"的棋子")
+                    console.log("收回"+place+"的棋子")
         return [win, lose, draw + probability];
     }
     else {
-        //           console.log("没结束"+change(m_side)+"走棋")
-        for (let t = 1; t <= 9; t++) {
-            if (chesspieces[t] !== ' ') {
-                continue;
+                   console.log("没结束"+getOpponent(m_side)+"走棋")
+        if (m_side === side) {
+            for (let t = 1; t < possiblePlace.length; t++) {
+                if (chesspieces[possiblePlace[t]] !== ' ') {
+                    continue;
+                }
+                [win, lose, draw] = getProbability([win, lose, draw], possiblePlace[t], getOpponent(m_side), probability, side, possiblePlace);
             }
-            [win, lose, draw] = getProbability1([win, lose, draw], t, change(m_side), probability, side);
+        }
+        else {
+            for (let t = 1; t <= 9; t++) {
+                if (chesspieces[t] !== ' ') {
+                    continue;
+                }
+                [win, lose, draw] = getProbability([win, lose, draw], t, getOpponent(m_side), probability, side, possiblePlace);
+            }
         }
         chesspieces[place] = ' ';
-        //           console.log("收回"+place+"的棋子")
+                    console.log("收回"+place+"的棋子")
         return [win, lose, draw];
     }
 }
-function getProbability2([win, lose, draw], place, probability, side) {
-    probability *= (1 / getRemainingPiece());
-    let theOther = change(side);
-    //     console.log('走下面这步的概率为'+probability)
-    //      console.log(`在${place}假装走棋`)
-    placePiece(place, side);
-    if (isWin(side)) {
-        //          console.log("结束了，是赢的")
-        chesspieces[place] = ' ';
-        //          console.log("收回"+place+"的棋子")
-        return [win + probability, lose, draw];
-    }
-    else if (isWin(change(side))) {
-        //          console.log("结束了，是输的")
-        chesspieces[place] = ' ';
-        //          console.log("收回"+place+"的棋子")
-        return [win, lose + probability, draw];
-    }
-    else if (isFull()) {
-        //         console.log("结束了，平局")
-        chesspieces[place] = ' ';
-        //          console.log("收回"+place+"的棋子")
-        return [win, lose, draw + probability];
-    }
-    else {
-        //         console.log("没结束"+change(side)+"走棋")
-        let placeOfOpponent = findbestplace(theOther, 1)[0];
-        placePiece(placeOfOpponent, theOther); //找的时候还是用第一种方法找呃
-        //           console.log('对手在'+placeOfOpponent+'走棋')
-        for (let t = 1; t <= 9; t++) {
-            if (chesspieces[t] !== ' ') {
-                continue;
-            }
-            [win, lose, draw] = getProbability2([win, lose, draw], t, probability, side);
-        }
-        chesspieces[placeOfOpponent] = ' ';
-        chesspieces[place] = ' ';
-        //           console.log("收回"+place+'和'+placeOfOpponent+"的棋子")
-        return [win, lose, draw];
-    }
-}
-function getProbability(level, [win, lose, draw], place, m_side, probability, side) {
+function getProbabilityAccordingToLevel(level, [win, lose, draw], place, m_side, probability, side) {
     if (level === 1)
-        return getProbability1([win, lose, draw], place, m_side, probability, side);
+        return getProbability([win, lose, draw], place, m_side, probability, side);
     else
-        return getProbability2([win, lose, draw], place, probability, side);
+        return getProbability([win, lose, draw], place, m_side, probability, side, findbestplace(side, level - 1)[0]);
 }
 function findbestplace(side, level) {
-    let bestplace = 0;
+    let bestplace = [];
     let maxprobability = 0;
-    let win = 0;
+    let win = [];
+    let numberOfBestplace = 0;
     for (let i = 1; i <= 9; i++) {
         if (chesspieces[i] !== ' ') {
             continue;
         }
-        win = getProbability(level, [0, 0, 0], i, side, getRemainingPiece(), side)[0];
-        if (win > maxprobability) {
-            maxprobability = win;
-            bestplace = i;
+        win[i] = getProbabilityAccordingToLevel(level, [0, 0, 0], i, side, getRemainingPieceOfPossiblePlace(), side)[0];
+        if (win[i] > maxprobability) {
+            maxprobability = win[i];
         }
     }
-    return [bestplace, maxprobability];
+    for (let i = 1; i <= 9; i++) {
+        if (win[i] === maxprobability) {
+            bestplace[++numberOfBestplace] = i;
+        }
+    }
+    return [bestplace, maxprobability, numberOfBestplace];
 }
 function outputProbability(side, level) {
-    let [win, lose, draw] = [];
+    let bestplace = [];
+    let maxprobability = 0;
+    let numberOfBestplace = 0;
+    let win = [];
+    let [lose, draw] = [];
     for (let i = 1; i <= 9; i++) {
         if (chesspieces[i] !== ' ') {
             continue;
         }
-        [win, lose, draw] = getProbability(level, [0, 0, 0], i, side, getRemainingPiece(), side);
-        console.log(`在${i}号位置下棋的胜率为${win},败率为${lose}，平局的概率为${draw}`);
+        [win[i], lose, draw] = getProbabilityAccordingToLevel(level, [0, 0, 0], i, side, getRemainingPieceOfPossiblePlace(), side);
+        console.log(`在${i}号位置下棋的胜率为${win[i]},败率为${lose}，平局的概率为${draw}`);
+        if (win[i] > maxprobability) {
+            maxprobability = win[i];
+        }
     }
-    let [bestplace, maxprobability] = findbestplace(side, level);
-    console.log(`在${bestplace}号位置下棋胜率最大，胜率为${maxprobability}`);
-    return bestplace;
+    for (let i = 1; i <= 9; i++) {
+        if (win[i] === maxprobability) {
+            bestplace[++numberOfBestplace] = i;
+        }
+    }
+    let places = '';
+    bestplace.forEach((value) => {
+        places += `${value} `;
+    });
+    console.log(`在${places}位置下棋胜率最大，胜率为${maxprobability}`);
+    return [bestplace, numberOfBestplace];
 }
 exports.outputProbability = outputProbability;
+//chesspieces[1]='o'
+//chesspieces[3]='x'
+//chesspieces[7]='x'
+//chesspieces[6]='o'
+//chesspieces[8]='o'
+//chesspieces[9]='x'
 outputProbability('o', 2);
