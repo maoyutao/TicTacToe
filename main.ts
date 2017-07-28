@@ -1,5 +1,5 @@
 import {humanPlayer, computerPlayer} from "./player"
-import {outPutChessboard, isOver, getProbability} from "./chessboard"
+import {outPutChessboard, isOver} from "./chessboard"
 
 declare function require(path: string):any;
 
@@ -11,9 +11,6 @@ const rl = readline.createInterface({
 });
 
 
-let HumanPlayer = new humanPlayer('o')
-let ComputerPlayer = new computerPlayer('x')
-
 function question() {
     return new Promise((resolve, reject) => {
         rl.question('请输入1-9（对应棋盘上的9个位置)', (answer: string) => {
@@ -21,23 +18,36 @@ function question() {
         })
     })
 }
+function chooseLevel()  {
+    return new Promise((resolve,reject) => {
+        rl.question("请选择难度（输入‘random’或‘intelligence')", (answer: string) => {
+            resolve(answer)
+        })
+    })
+}
+
+
+
+
+async function main() {
 
 console.log("游戏开始")
+while((ComputerPlayer.level !== 'random') && (ComputerPlayer.level !== 'intellegence')) {
+ComputerPlayer.setlevel((await chooseLevel()) as string)
+}
 outPutChessboard()
 if(Math.random()>0.5) {
     console.log("您先下")
 }else {
     console.log("电脑先下")
     ComputerPlayer.changeState()
-    ComputerPlayer.randomPlace()
+    ComputerPlayer.placeAccordingToLevel()
     outPutChessboard();
 }
-
-async function main() {
 while(1)
 {
     console.log("您下棋")
-    getProbability('o')
+    
     HumanPlayer.changeState()
 
     while(HumanPlayer.state) {  
@@ -54,7 +64,7 @@ while(1)
     }
     console.log("电脑下棋")
     ComputerPlayer.changeState()
-    ComputerPlayer.randomPlace()
+    ComputerPlayer.placeAccordingToLevel()
     outPutChessboard();
     [flag,info] = isOver()
     if(flag) {
@@ -63,6 +73,10 @@ while(1)
     }
 }
 }
+
+let HumanPlayer = new humanPlayer('o')
+let ComputerPlayer = new computerPlayer('x')
+
 main()
 
 

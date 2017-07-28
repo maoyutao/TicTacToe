@@ -128,6 +128,8 @@ function getProbability(side) {
             return [win, lose, draw];
         }
     }
+    let bestplace = 0;
+    let maxprobability = 0;
     let theOther = change(side);
     let [win, lose, draw] = [];
     for (let i = 1; i <= 9; i++) {
@@ -135,7 +137,13 @@ function getProbability(side) {
             continue;
         }
         [win, lose, draw] = s([0, 0, 0], i, side, getRemainingPiece());
+        if (win > maxprobability) {
+            maxprobability = win;
+            bestplace = i;
+        }
         console.log(`在${i}号位置下棋的胜率为${win},败率为${lose}，平局的概率为${draw}`);
     }
+    console.log(`在${bestplace}号位置下棋胜率最大，胜率为${maxprobability}`);
+    return bestplace;
 }
 exports.getProbability = getProbability;

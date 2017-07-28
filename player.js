@@ -42,5 +42,22 @@ class computerPlayer extends player {
             this.changeState();
         }
     }
+    intelligencePlace() {
+        if (this.state) {
+            while (!chessboard_1.placePiece(chessboard_1.getProbability(this.side), this.side)) { }
+            this.changeState();
+        }
+    }
+    placeAccordingToLevel() {
+        if (this.level === 'random') {
+            this.randomPlace();
+        }
+        else {
+            this.intelligencePlace();
+        }
+    }
+    setlevel(str) {
+        this.level = str;
+    }
 }
 exports.computerPlayer = computerPlayer;

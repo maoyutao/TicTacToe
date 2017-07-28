@@ -53,7 +53,6 @@ function isFull():boolean
 }
 export function isOver():[boolean,string]
 {
-
    if(isWin('o'))  {
         init()
         return [true,"游戏结束，o方胜利"]
@@ -87,7 +86,7 @@ function isWin(side:typeOfChessman):boolean  {
 
 
 
-export function getProbability(side:typeOfChessman)
+export function getProbability(side:typeOfChessman):number
 {
 
     function change(now:typeOfChessman):typeOfChessman  {
@@ -141,7 +140,8 @@ export function getProbability(side:typeOfChessman)
         }
         
     }
-
+    let bestplace:number = 0
+    let maxprobability:number = 0
     let theOther:typeOfChessman = change(side)
     let [win,lose,draw]:number[] = []
     for(let i=1; i<=9; i++) {
@@ -149,9 +149,16 @@ export function getProbability(side:typeOfChessman)
             continue
         }
         [win,lose,draw] = s([0,0,0],i,side,getRemainingPiece())
+        if (win>maxprobability) {
+            maxprobability = win
+            bestplace = i
+        }
         console.log(
         `在${i}号位置下棋的胜率为${win},败率为${lose}，平局的概率为${draw}`)
     }
-
+    console.log(
+    `在${bestplace}号位置下棋胜率最大，胜率为${maxprobability}`
+    )
+    return bestplace
 }
 
