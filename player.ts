@@ -1,4 +1,4 @@
-import { placePiece, getProbability} from "./chessboard"
+import { placePiece, outputProbability } from './chessboard'
 
 class player
 {
@@ -29,12 +29,13 @@ export class humanPlayer extends player
             return "您现在不能下棋"
         }
     }
+
 }
 
 export class computerPlayer extends player
 {
 
-    level:string 
+    public level:string 
     randomPlace() {
         if(this.state) {
             while (!placePiece(Math.floor(Math.random()*9),this.side)){}
@@ -44,7 +45,7 @@ export class computerPlayer extends player
     intelligencePlace()
     {
         if(this.state) {
-            while (!placePiece(getProbability(this.side),this.side)){}
+            while (!placePiece(outputProbability(this.side,2),this.side)){}
             this.changeState()
         }
     }
@@ -55,8 +56,13 @@ export class computerPlayer extends player
             this.intelligencePlace()
         }
     }
-    setlevel(str:string)
+    setlevel(s:number)
     {
-        this.level = str
+        if(s === 1) {
+        this.level = 'random'
+        }else if(s === 2) {
+        this.level = 'intelligence'
+        }
+
     }
 }

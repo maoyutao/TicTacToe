@@ -24,15 +24,15 @@ function question() {
 }
 function chooseLevel() {
     return new Promise((resolve, reject) => {
-        rl.question("请选择难度（输入‘random’或‘intelligence')", (answer) => {
-            resolve(answer);
+        rl.question("请选择难度（输入1或2代表‘random’或‘intelligence')", (answer) => {
+            resolve(parseInt(answer));
         });
     });
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("游戏开始");
-        while ((ComputerPlayer.level !== 'random') && (ComputerPlayer.level !== 'intellegence')) {
+        while ((ComputerPlayer.level !== 'random') && (ComputerPlayer.level !== 'intelligence')) {
             ComputerPlayer.setlevel((yield chooseLevel()));
         }
         chessboard_1.outPutChessboard();
@@ -69,6 +69,8 @@ function main() {
                 break;
             }
         }
+        console.log('再来一局？（yes or no）');
+        //to do
     });
 }
 let HumanPlayer = new player_1.humanPlayer('o');

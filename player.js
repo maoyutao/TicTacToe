@@ -44,7 +44,7 @@ class computerPlayer extends player {
     }
     intelligencePlace() {
         if (this.state) {
-            while (!chessboard_1.placePiece(chessboard_1.getProbability(this.side), this.side)) { }
+            while (!chessboard_1.placePiece(chessboard_1.outputProbability(this.side, 2), this.side)) { }
             this.changeState();
         }
     }
@@ -56,8 +56,13 @@ class computerPlayer extends player {
             this.intelligencePlace();
         }
     }
-    setlevel(str) {
-        this.level = str;
+    setlevel(s) {
+        if (s === 1) {
+            this.level = 'random';
+        }
+        else if (s === 2) {
+            this.level = 'intelligence';
+        }
     }
 }
 exports.computerPlayer = computerPlayer;

@@ -20,8 +20,8 @@ function question() {
 }
 function chooseLevel()  {
     return new Promise((resolve,reject) => {
-        rl.question("请选择难度（输入‘random’或‘intelligence')", (answer: string) => {
-            resolve(answer)
+        rl.question("请选择难度（输入1或2代表‘random’或‘intelligence')", (answer: string) => {
+            resolve(parseInt(answer))
         })
     })
 }
@@ -32,8 +32,8 @@ function chooseLevel()  {
 async function main() {
 
 console.log("游戏开始")
-while((ComputerPlayer.level !== 'random') && (ComputerPlayer.level !== 'intellegence')) {
-ComputerPlayer.setlevel((await chooseLevel()) as string)
+while((ComputerPlayer.level !== 'random') && (ComputerPlayer.level !== 'intelligence')) {
+ComputerPlayer.setlevel((await chooseLevel()) as number)
 }
 outPutChessboard()
 if(Math.random()>0.5) {
@@ -50,15 +50,15 @@ while(1)
     
     HumanPlayer.changeState()
 
-    while(HumanPlayer.state) {  
+    while (HumanPlayer.state) {  
         let num:number = (await question()) as number
         let info = HumanPlayer.place(num)
         console.log(info)
     }
     
     outPutChessboard()
-    let [flag,info]:[boolean,string] = isOver()
-    if(flag) {
+    let [ flag, info ]:[boolean,string] = isOver()
+    if (flag) {
         console.log(info)
         break
     }
@@ -72,6 +72,8 @@ while(1)
         break
     }
 }
+console.log('再来一局？（yes or no）')
+//to do
 }
 
 let HumanPlayer = new humanPlayer('o')
