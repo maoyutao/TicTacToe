@@ -10,7 +10,7 @@ function init()
 }
 init()
 
-let chessboard:string = 
+let chessboard:string =
 `-------------
 | ${chesspieces[1]} | ${chesspieces[2]} | ${chesspieces[3]} |
 -------------
@@ -97,14 +97,9 @@ function getRemainingPieceOfPossiblePlace(possiblePlace:number[]=[0,1,2,3,4,5,6,
     return result
 }
 
-//计算side走在place处的输赢概率 
-function getProbability([win,lose,draw]:number[],place:number,m_side:typeOfChessman,probability:number,side:typeOfChessman,possiblePlace:number[]=[0,1,2,3,4,5,6,7,8,9]):number[]  
+//计算side走在place处的输赢概率
+function getProbability([win,lose,draw]:number[],place:number,m_side:typeOfChessman,probability:number,side:typeOfChessman,level:number):number[]
 {
-    if(m_side === side ) {
-        probability *= (1/getRemainingPieceOfPossiblePlace())
-    } else {
-    probability *= (1/getRemainingPieceOfPossiblePlace(possiblePlace))
-    }
 //       console.log('走下面这步的概率为'+probability)
 //       console.log(`在${place}假装走棋`)
         placePiece(place,m_side)
@@ -127,20 +122,31 @@ function getProbability([win,lose,draw]:number[],place:number,m_side:typeOfChess
             return [win, lose, draw+probability]
         }
         else  {
+          let possiblePlace:number[]=[0,1,2,3,4,5,6,7,8,9]
+          if (m_side === side) {
+            if (level > 1) {
+              possiblePlace = findbestplace(getOpponent(m_side),level-1)[0]
+              //outPutChessboard()
+              //console.log(getOpponent(m_side)+'落子最好点',possiblePlace)
+            }
+            probability *= (1/getRemainingPieceOfPossiblePlace(possiblePlace))
+          } else {
+            probability *= (1/getRemainingPieceOfPossiblePlace())
+          }
 //            console.log("没结束"+getOpponent(m_side)+"走棋")
             if(m_side === side)  {
                 for(let t=1; t<possiblePlace.length; t++) {
                 if(chesspieces[possiblePlace[t]] !== ' ') {
                     continue
                 }
-                [win,lose,draw] = getProbability([win,lose,draw],possiblePlace[t],getOpponent(m_side),probability,side,possiblePlace)
+                [win,lose,draw] = getProbability([win,lose,draw],possiblePlace[t],getOpponent(m_side),probability,side,level)
             }
             }else {
             for(let t=1; t<=9; t++) {
                 if(chesspieces[t] !== ' ') {
                     continue
                 }
-                [win,lose,draw] = getProbability([win,lose,draw],t,getOpponent(m_side),probability,side,possiblePlace)
+                [win,lose,draw] = getProbability([win,lose,draw],t,getOpponent(m_side),probability,side,level)
             }
             }
             chesspieces[place] = ' '
@@ -149,30 +155,30 @@ function getProbability([win,lose,draw]:number[],place:number,m_side:typeOfChess
     }
 }
 function getProbabilityAccordingToLevel(level:number,[win,lose,draw]:number[],place:number,m_side:typeOfChessman,probability:number,side:typeOfChessman) {
-    if (level === 1)
-        return getProbability([win,lose,draw],place,m_side,probability,side)
-    else return getProbability([win,lose,draw],place,m_side,probability,side,findbestplace(side,level-1)[0])
+    return getProbability([win,lose,draw],place,m_side,probability,side,level)
 }
 
 function findbestplace(side:typeOfChessman,level:number):[number[],number,number]
 {
     let bestplace:number[] = []
     let maxprobability:number = 0
-    let win:number[] = []
+    let notloose:number[] = []
+    let [win,lose,draw]:number[] = []
     let numberOfBestplace:number = 0
     for(let i=1; i<=9; i++) {
         if(chesspieces[i] !== ' ') {
             continue
         }
-        win[i] = getProbabilityAccordingToLevel(level,[0,0,0],i,side,getRemainingPieceOfPossiblePlace(),side)[0]
-        if (win[i]>maxprobability) {
-            maxprobability = win[i]
+        [win,lose,draw] = getProbabilityAccordingToLevel(level,[0,0,0],i,side,1,side)
+        notloose[i] = win + draw
+        if (notloose[i]>maxprobability) {
+            maxprobability = notloose[i]
         }
     }
     for(let i =1; i<=9;i++) {
-        if(win[i] === maxprobability)  {
-        bestplace[++numberOfBestplace] = i;
-        }
+      if(notloose[i] === maxprobability)  {
+        bestplace[++numberOfBestplace] = i
+      }
     }
     return [bestplace,maxprobability,numberOfBestplace]
 }
@@ -187,9 +193,9 @@ export function outputProbability(side:typeOfChessman,level:number):[number[],nu
         if(chesspieces[i] !== ' ') {
             continue
         }
-        [win[i],lose,draw] = getProbabilityAccordingToLevel(level,[0,0,0],i,side,getRemainingPieceOfPossiblePlace(),side)
+        [win[i],lose,draw] = getProbabilityAccordingToLevel(level,[0,0,0],i,side,1,side)
         console.log(
-        `在${i}号位置下棋的胜率为${win[i]},败率为${lose}，平局的概率为${draw}`)
+        `${side}在${i}号位置下棋的胜率为${win[i]},败率为${lose}，平局的概率为${draw}`)
         if (win[i]>maxprobability) {
         maxprobability = win[i]
         }
@@ -206,7 +212,7 @@ export function outputProbability(side:typeOfChessman,level:number):[number[],nu
         places += `${value} `
     })
     console.log(
-    `在${places}位置下棋胜率最大，胜率为${maxprobability}`
+    `${side}在${places}位置下棋胜率最大，胜率为${maxprobability}`
     )
     return [bestplace,numberOfBestplace]
 }
@@ -218,4 +224,8 @@ export function outputProbability(side:typeOfChessman,level:number):[number[],nu
 //chesspieces[6]='o'
 //chesspieces[8]='o'
 //chesspieces[9]='x'
-outputProbability('o',3)
+outPutChessboard()
+for (let level = 1; level <= 3; level++) {
+  console.log('\n等级', level)
+  outputProbability('o',level)
+}
