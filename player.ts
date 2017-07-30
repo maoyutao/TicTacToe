@@ -11,6 +11,9 @@ class player
             this.state = true
         }
     }
+    init(){
+        this.state = false
+    }
 }
 export class humanPlayer extends player
 {
@@ -75,5 +78,9 @@ export class computerPlayer extends player
       }
       this.level = s
       return true
+    }
+    init() {
+        this.state = false
+        this.level = 1
     }
 }

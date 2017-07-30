@@ -26,11 +26,19 @@ function chooseLevel()  {
     })
 }
 
-
+function restart() {
+    return new Promise((resolve, reject) => {
+        rl.question("再来一局？（输入'q'退出，输入其他再来一局）", (answer:string) => {
+            resolve(parseInt(answer));
+        });
+    });
+}
 
 
 async function main() {
-
+let HumanPlayer = new humanPlayer('o')
+let ComputerPlayer = new computerPlayer('x')
+while(1){
 console.log("游戏开始")
 while(!ComputerPlayer.setlevel((await chooseLevel()) as number)) {
 
@@ -72,11 +80,15 @@ while(1)
         break
     }
 }
-console.log('再来一局？（yes or no）')
-//to do
-}
 
-let HumanPlayer = new humanPlayer('o')
-let ComputerPlayer = new computerPlayer('x')
+let restartOrNot = await restart()
+    if(restartOrNot === 'q') {
+        break
+    }else {
+        ComputerPlayer.init()
+        HumanPlayer.init()
+    }
+}
+}
 
 main()
