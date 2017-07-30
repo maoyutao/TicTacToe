@@ -35,36 +35,45 @@ export class humanPlayer extends player
 export class computerPlayer extends player
 {
 
-    public level:string 
+    public level:number
     randomPlace() {
         if(this.state) {
             while (!placePiece(Math.floor(Math.random()*9),this.side)){}
             this.changeState()
         }
     }
-    intelligencePlace()
+    intelligencePlace(level: number)
     {
         if(this.state) {
-            let [bestplace,numberOfBestplace] =outputProbability(this.side,2)
-            let finalPlace = Math.floor(Math.random()*numberOfBestplace)
-            placePiece(bestplace[finalPlace],this.side)
+            let [bestplace,numberOfBestplace,fineplace,numberOfFineplace] =outputProbability(this.side,level)
+            let i: number, finalPlace: number
+            if (numberOfBestplace > 0) {
+              i = Math.floor(Math.random()*numberOfBestplace) + 1
+              finalPlace = bestplace[i]
+            } else {
+              i = Math.floor(Math.random()*numberOfFineplace) + 1
+              finalPlace = fineplace[i]
+            }
+            placePiece(finalPlace,this.side)
             this.changeState()
         }
     }
     placeAccordingToLevel()  {
-        if(this.level === 'random') {
+        if(this.level <= 1) {
             this.randomPlace()
         }else {
-            this.intelligencePlace()
+            this.intelligencePlace(this.level)
         }
     }
     setlevel(s:number)
     {
-        if(s === 1) {
-        this.level = 'random'
-        }else if(s === 2) {
-        this.level = 'intelligence'
-        }
-
+      if (!s) {
+        return false
+      }
+      if (s < 1 || s > 10) {
+        return false
+      }
+      this.level = s
+      return true
     }
 }

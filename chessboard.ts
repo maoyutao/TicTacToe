@@ -182,29 +182,41 @@ function findbestplace(side:typeOfChessman,level:number):[number[],number,number
     }
     return [bestplace,maxprobability,numberOfBestplace]
 }
-export function outputProbability(side:typeOfChessman,level:number):[number[],number]
+export function outputProbability(side:typeOfChessman,level:number):[number[],number,number[],number]
 {
     let bestplace:number[] = []
+    let fineplace:number[] = []
     let maxprobability:number = 0
+    let maxdrawprobability:number = 0
     let numberOfBestplace:number = 0
+    let numberOfFineplace:number = 0
     let win:number[] = []
-    let [lose,draw]:number[] = []
+    let draw:number[] = []
+    let lose:number
     for(let i=1; i<=9; i++) {
         if(chesspieces[i] !== ' ') {
             continue
         }
-        [win[i],lose,draw] = getProbabilityAccordingToLevel(level,[0,0,0],i,side,1,side)
+        [win[i],lose,draw[i]] = getProbabilityAccordingToLevel(level,[0,0,0],i,side,1,side)
         console.log(
-        `${side}在${i}号位置下棋的胜率为${win[i]},败率为${lose}，平局的概率为${draw}`)
+        `${side}在${i}号位置下棋的胜率为${win[i]},败率为${lose}，平局的概率为${draw[i]}`)
         if (win[i]>maxprobability) {
-        maxprobability = win[i]
+          maxprobability = win[i]
+        }
+        if (draw[i]>maxdrawprobability) {
+          maxdrawprobability = draw[i]
         }
     }
 
     for(let i =1; i<=9;i++) {
+      if (maxprobability > 0) {
         if(win[i] === maxprobability)  {
-        bestplace[++numberOfBestplace] = i;
+          bestplace[++numberOfBestplace] = i;
         }
+      }
+      if(draw[i] === maxdrawprobability)  {
+        fineplace[++numberOfFineplace] = i;
+      }
     }
 
     let places:string = ''
@@ -214,18 +226,5 @@ export function outputProbability(side:typeOfChessman,level:number):[number[],nu
     console.log(
     `${side}在${places}位置下棋胜率最大，胜率为${maxprobability}`
     )
-    return [bestplace,numberOfBestplace]
-}
-
-
-//chesspieces[1]='o'
-//chesspieces[3]='x'
-//chesspieces[7]='x'
-//chesspieces[6]='o'
-//chesspieces[8]='o'
-//chesspieces[9]='x'
-outPutChessboard()
-for (let level = 1; level <= 3; level++) {
-  console.log('\n等级', level)
-  outputProbability('o',level)
+    return [bestplace,numberOfBestplace,fineplace,numberOfFineplace]
 }
