@@ -1,0 +1,19 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended",
+        "tslint-eslint-rules"
+    ],
+    "jsRules": {},
+    "rules": {
+        "semicolon": [ true, "never" ],
+        "no-console": [ true, "debug", "info", "time", "timeEnd" ],
+        "quotemark": [ true, "single", "avoid-escape", "jsx-double" ],
+        "radix": false,
+        "align": [ true, "parameters", "arguments", "members", "elements" ],
+        "ter-arrow-spacing": [ true ],
+        "no-extra-semi": true,
+        "object-curly-spacing": "always"
+    },
+    "rulesDirectory": []
+}
