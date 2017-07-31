@@ -11,9 +11,9 @@ export class HumanPlayer extends Player {
       }
       if (this.chessboard.placePiece(num, this.side)) {
         this.changeState()
-        return `${this.side}方在${num}号位置成功落子`
+        return `${this.side}方在${num + 1}号位置成功落子`
       } else {
-        return `${num}号位置不可落子`
+        return `${num + 1}号位置不可落子`
       }
     } else {
       return '您现在不能下棋'

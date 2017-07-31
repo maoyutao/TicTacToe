@@ -6,7 +6,7 @@ export class ComputerPlayer extends Player {
   public level: number
   public init() {
     this.state = false
-    this.level = 1
+    this.level = 2
   }
   public setLevel(s: number) {
     if (!s) {
@@ -47,7 +47,15 @@ export class ComputerPlayer extends Player {
       this.randomPlace()
     } else {
       // this.intelligencePlace(this.level)
-      this.chessboard.placePiece(this.chessboard.findTheBestPlace(this.side, this.side)[0], this.side)
+      let places:number[] = []
+      let v:number[] = [] 
+      ;[ places,,v ]= this.chessboard.findTheBestPlace(this.side, this.side, 0)
+      places.forEach((value) => {
+        console.log(++value)
+      });
+      console.log(v)
+      const i = Math.floor(Math.random() * places.length)
+      this.chessboard.placePiece(places[i], this.side)
     }
   }
 }

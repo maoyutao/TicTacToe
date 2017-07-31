@@ -38,8 +38,9 @@ export class Chessboard {
     } else if (this.isFull()) {
       this.init()
       return [ true, '游戏结束，平局' ]
+    } else {
+      return [ false, '游戏继续' ]
     }
-    return [ false, '游戏继续' ]
   }
 
   public outputProbability(side: string, level: number): [number[], number[]] {
@@ -82,47 +83,48 @@ export class Chessboard {
     return [ bestplace, fineplace ]
   }
 
-  public findTheBestPlace(mside: string, side: string): [number, number] {
-    let place: number | undefined
+  public findTheBestPlace(mside: string, side: string, step:number): [ number[], number, number[] ] {
+    const place:number[] = []
     let value: number | undefined
+    const v: number[] = []
+    for (let i = 0; i <= 8; i++) {
+      if (this.chesspieces[i] !== ' ') {
+        continue
+      }    
+      this.placePiece(i, mside)
+      if (this.isWin(side)) {
+        v[i] = 10 - step
+        this.chesspieces[i] = ' '
+      } else if (this.isWin(this.getOpponent(side))) {
+        v[i] = -10 + step
+        this.chesspieces[i] = ' '
+      } else if (this.isFull()) {
+        v[i] = 0
+        this.chesspieces[i] = ' '
+      } else {
+        v[i] = this.findTheBestPlace(this.getOpponent(mside), side, ++step)[1]
+        this.chesspieces[i] = ' '
+        step --
+      }
+      if (side === mside) {
+        if ((value === undefined) || v[i] >= value) {
+          value = v[i]
+        }
+      } else {
+        if ((value === undefined) || v[i] <= value) {
+          value = v[i]
+        }
+      }
+    }
     for (let i = 0; i <= 8; i++) {
       if (this.chesspieces[i] !== ' ') {
         continue
       }
-      let v: number | undefined
-      this.placePiece(i, mside)
-      if (this.isWin(side)) {
-        v = 1
-        this.chesspieces[i] = ' '
-      } else if (this.isWin(this.getOpponent(side))) {
-        v = -1
-        this.chesspieces[i] = ' '
-      } else if (this.isFull()) {
-        v = 0
-        this.chesspieces[i] = ' '
-      } else {
-        v = this.findTheBestPlace(this.getOpponent(mside), side)[1]
-        this.chesspieces[i] = ' '
-      }
-      if (side === mside) {
-        if ((value === undefined) || v >= value) {
-          value = v
-          place = i
-        }
-        if (value === 1) {
-          return [ place as number, value as number ]
-        }
-      } else {
-        if ((value === undefined) || v <= value) {
-          value = v
-          place = i
-        }
-        if (value === -1) {
-          return [ place as number, value as number ]
-        }
+      if(v[i] === value)  {
+        place.push(i)
       }
     }
-    return [ place as number, value as number ]
+    return [ place, value as number, v ]
   }
 
   private init() {
@@ -258,3 +260,4 @@ export class Chessboard {
     return [ bestplace, maxprobability, numberOfBestplace ]
   }
 }
+
