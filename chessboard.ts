@@ -228,3 +228,44 @@ export function outputProbability(side:typeOfChessman,level:number):[number[],nu
     )
     return [bestplace,numberOfBestplace,fineplace,numberOfFineplace]
 }
+
+
+export function findTheBestPlace(m_side:typeOfChessman,side:typeOfChessman):[number,number] {
+    let place:number|undefined
+    let value:number|undefined
+    for(let i = 1; i <= 9; i++ ) {
+        if(chesspieces[i]!== ' ') {
+            continue
+        }
+        let v:number|undefined
+        placePiece(i,m_side)
+        if(isWin(side)) {
+            v = 1
+            chesspieces[i] = ' '
+        }else if (isWin(getOpponent(side))) {
+            v = -1
+            chesspieces[i] = ' '
+        }else if(isFull())  {
+            v = 0
+            chesspieces[i] = ' '
+        }else {
+            v = findTheBestPlace(getOpponent(m_side),side)[1]
+            chesspieces[i] = ' '
+        }
+        if(side === m_side) {
+            if( (value === undefined)|| v>=value) {
+            value = v
+            place = i
+            }
+            if(value === 1) return [place as number, value as number]
+        }else {
+            if( (value === undefined)|| v<=value) {
+            value = v
+            place = i
+            }
+            if(value === -1) return [place as number, value as number]
+        }
+    }
+    return [place as number, value as number]
+}
+

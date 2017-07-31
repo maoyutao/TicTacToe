@@ -1,4 +1,4 @@
-import { placePiece, outputProbability } from './chessboard'
+import { placePiece, outputProbability ,findTheBestPlace} from './chessboard'
 
 class player
 {
@@ -62,11 +62,13 @@ export class computerPlayer extends player
         }
     }
     placeAccordingToLevel()  {
-        if(this.level <= 1) {
+
+        placePiece(findTheBestPlace(this.side,this.side)[0],this.side)
+        /*if(this.level <= 1) {
             this.randomPlace()
         }else {
             this.intelligencePlace(this.level)
-        }
+        }*/
     }
     setlevel(s:number)
     {
