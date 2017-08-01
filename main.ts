@@ -19,7 +19,7 @@ function question(): Promise<number> {
 
 function chooseLevel(): Promise<number> {
   return new Promise((resolve, reject) => {
-    rl.question('请选择难度（输入1-10难度)', (answer: string) => {
+    rl.question('请选择难度（输入0选择随机，输入1选择一个机智的AI，输入2-10选择一个魔性的AI)', (answer: string) => {
       resolve(parseInt(answer))
     })
   })
@@ -84,10 +84,10 @@ async function main() {
     }
   }
 }
-/*
+
 main().catch((err: any) => {
   console.error(err)
-})*/
+})
 
 function test()  {
   const chessboard = new Chessboard()
@@ -118,10 +118,10 @@ function test()  {
   }
   return info
 }
-
+/*
 for (let i = 0; i < 100; i++)  {
   if (test() !== '游戏结束，平局')  {
     console.log('有错有错有错')
     break
   }
-}
+}*/

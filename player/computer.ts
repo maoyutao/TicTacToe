@@ -8,10 +8,7 @@ export class ComputerPlayer extends Player {
     this.level = 2
   }
   public setLevel(s: number) {
-    if (!s) {
-      return false
-    }
-    if (s < 1 || s > 10) {
+    if (s < 0 || s > 10) {
       return false
     }
     this.level = s
@@ -35,20 +32,37 @@ export class ComputerPlayer extends Player {
         finalPlace = fineplace
       }
       const mfinalPlace = finalPlace.map(p => p + 1)
-      console.log('方法1会在' + mfinalPlace + '下棋')
+      // console.log('方法1会在' + mfinalPlace + '下棋')
       const i = Math.floor(Math.random() * finalPlace.length)
       this.chessboard.placePiece(finalPlace[i], this.side)
-      // this.changeState()
+      this.changeState()
     }
   }
   public placeAccordingToLevel() {
-    if (this.level <= 1) {
-      // this.randomPlace()
+    if (this.level === 0) {
+        this.randomPlace()
+    } else if (this.level === 1) {
+      // console.log('原先的')
       let places: number[] = []
       let v: number[] = []
+      let begin = new Date().getTime()
+      this.chessboard.counter = 0
+      ; [ places, , v ] = this.chessboard.findTheBestPlace1(this.side, this.side, 0)
+      let end = new Date().getTime()
+      // console.log('time = ' + (end - begin))
+      // console.log('count =' + this.chessboard.counter)
+      const mplaces = places.map(p => p + 1)
+      // console.log(mplaces)
+      // console.log(v)
+      // console.log('改进后的')
+      begin = new Date().getTime()
       this.chessboard.counter = 0
       ; [ places, , v ] = this.chessboard.findTheBestPlace(this.side, this.side, 0, -100, 100)
-      console.log('count =' + this.chessboard.counter)
+      end = new Date().getTime()
+      // console.log('time = ' + (end - begin))
+      // console.log('count=' + this.chessboard.counter)
+      // console.log(mplaces)
+      // console.log(v)
       const i = Math.floor(Math.random() * places.length)
       this.chessboard.placePiece(places[i], this.side)
       this.changeState()
@@ -56,38 +70,9 @@ export class ComputerPlayer extends Player {
       const begin: number  = new Date().getTime()
       this.chessboard.counter = 0
       this.intelligencePlace(this.level)
-      console.log('count =' + this.chessboard.counter)
-      /*
-      let end: number  = new Date().getTime()
-      console.log('time = ' + (end - begin))
-      console.log('count =' + this.chessboard.counter)
-      console.log('原先的')
-      let places1: number[] = []
-      let v1: number[] = []
-      begin = new Date().getTime()
-      this.chessboard.counter = 0
-      ; [ places1, , v1 ] = this.chessboard.findTheBestPlace1(this.side, this.side, 0)
-      end = new Date().getTime()
-      console.log('time = ' + (end - begin))
-      console.log('count =' + this.chessboard.counter)
-      const mplaces1 = places1.map(p => p + 1)
-      console.log(mplaces1)
-      console.log(v1)
-      console.log('改进后的')
-      let places: number[] = []
-      let v: number[] = []
-      begin = new Date().getTime()
-      this.chessboard.counter = 0
-      ; [ places, , v ] = this.chessboard.findTheBestPlace(this.side, this.side, 0, -100, 100)
-      end = new Date().getTime()
-      console.log('time = ' + (end - begin))
-      console.log('count=' + this.chessboard.counter)
-      const mplaces = places.map(p => p + 1)
-      console.log(mplaces)
-      console.log(v)
-      const i = Math.floor(Math.random() * places.length)
-      this.chessboard.placePiece(places[i], this.side)*/
-      this.changeState()
+      const end: number  = new Date().getTime()
+      // console.log('time = ' + (end - begin))
+      // console.log('count =' + this.chessboard.counter)
     }
   }
 }
