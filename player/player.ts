@@ -5,7 +5,8 @@ export class Player {
 
   public state: boolean = false
 
-  constructor(public side: string, public chessboard: Chessboard) { }
+  constructor(public side: TChessman, public chessboard: Chessboard) { }
+
   public init() {
     this.state = false
   }

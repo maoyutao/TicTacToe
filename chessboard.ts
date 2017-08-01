@@ -2,7 +2,6 @@ import { TChessman } from './types'
 
 export class Chessboard {
 
-  private chesspieces: string[] = []
 
   constructor() {
     this.init()
@@ -83,7 +82,6 @@ export class Chessboard {
     return [ bestplace, fineplace ]
   }
 
-  public findTheBestPlace(mside: string, side: string, step:number): [ number[], number, number[] ] {
     const place:number[] = []
     let value: number | undefined
     const v: number[] = []
@@ -102,15 +100,11 @@ export class Chessboard {
         v[i] = 0
         this.chesspieces[i] = ' '
       } else {
-        v[i] = this.findTheBestPlace(this.getOpponent(mside), side, ++step)[1]
-        this.chesspieces[i] = ' '
-        step --
       }
       if (side === mside) {
         if ((value === undefined) || v[i] >= value) {
           value = v[i]
         }
-      } else {
         if ((value === undefined) || v[i] <= value) {
           value = v[i]
         }

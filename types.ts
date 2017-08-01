@@ -1,5 +1,5 @@
 export enum TChessman {
-  'o',
-  'x',
-  ' ',
+  O,
+  X,
+  N,
 }

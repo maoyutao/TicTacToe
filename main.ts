@@ -35,8 +35,8 @@ function restart(): Promise<string> {
 
 async function main() {
   const chessboard = new Chessboard()
-  const humanPlayer = new HumanPlayer(TChessman[0], chessboard)
-  const computerPlayer = new ComputerPlayer(TChessman[1], chessboard)
+  const humanPlayer = new HumanPlayer(TChessman.O, chessboard)
+  const computerPlayer = new ComputerPlayer(TChessman.X, chessboard)
   while (1) {
     console.log('游戏开始')
     while (!computerPlayer.setLevel((await chooseLevel()) as number)) {
@@ -84,28 +84,21 @@ async function main() {
     }
   }
 }
-
+/*
 main().catch((err: any) => {
   console.error(err)
-})
+})*/
 
 function test()  {
   const chessboard = new Chessboard()
-  const computerPlayer1 = new ComputerPlayer(TChessman[0], chessboard)
-  const computerPlayer2 = new ComputerPlayer(TChessman[1], chessboard)
-  computerPlayer1.setLevel(2)
-  console.log('o是智能，x是随机')
-  let flag:boolean
-  let info:string = ' '
-  while(1)  {
-    computerPlayer1.changeState()
-    computerPlayer1.placeAccordingToLevel()
-    chessboard.outputChessboard()
-    ; [ flag, info ] = chessboard.isOver()
-    if (flag) {
-      console.log(info)
-      break
-    }
+  const computerPlayer1 = new ComputerPlayer(TChessman.O, chessboard)
+  const computerPlayer2 = new ComputerPlayer(TChessman.X, chessboard)
+  computerPlayer1.setLevel(10)
+  computerPlayer2.setLevel(1)
+  console.log('o是方法一，x是决策树')
+  let flag: boolean
+  let info: string = ' '
+  while (1)  {
     computerPlayer2.changeState()
     computerPlayer2.placeAccordingToLevel()
     chessboard.outputChessboard()
@@ -114,14 +107,21 @@ function test()  {
       console.log(info)
       break
     }
+    computerPlayer1.changeState()
+    computerPlayer1.placeAccordingToLevel()
+    chessboard.outputChessboard()
+    ; [ flag, info ] = chessboard.isOver()
+    if (flag) {
+      console.log(info)
+      break
+    }
   }
-  return info 
+  return info
 }
-/*
-for(let i = 0; i < 100; i++)  {
-  if(test() === '游戏结束，x方胜利')  {
+
+for (let i = 0; i < 100; i++)  {
+  if (test() !== '游戏结束，平局')  {
     console.log('有错有错有错')
     break
   }
 }
-*/

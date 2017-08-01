@@ -1,5 +1,4 @@
 import { Chessboard } from '../chessboard'
-import { TChessman } from '../types'
 import { Player } from './player'
 
 export class HumanPlayer extends Player {
