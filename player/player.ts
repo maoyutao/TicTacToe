@@ -7,6 +7,10 @@ export class Player {
 
   constructor(public side: TChessman, public chessboard: Chessboard) { }
 
+  public getChessboard()  {
+    return this.chessboard
+}
+
   public init() {
     this.state = false
   }

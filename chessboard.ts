@@ -9,30 +9,23 @@ export class Chessboard {
     this.init()
   }
 
-  public outputChessboard() {
-    console.log('当前棋盘如下：')
+  public Chessboard() {
     const mchesspieces: string[] = []
     this.chesspieces.forEach((value, index) => {
-      switch (value) {
-        case TChessman.N:
-          mchesspieces[index] = ' '
-          break
-        case TChessman.O:
-          mchesspieces[index] = 'o'
-          break
-        case TChessman.X:
-          mchesspieces[index] = 'x'
-          break
-      }
-    })
-    console.log(`-------------
-| ${mchesspieces[0]} | ${mchesspieces[1]} | ${mchesspieces[2]} |
--------------
-| ${mchesspieces[3]} | ${mchesspieces[4]} | ${mchesspieces[5]} |
--------------
-| ${mchesspieces[6]} | ${mchesspieces[7]} | ${mchesspieces[8]} |
--------------`)
-  }
+    switch (value) {
+      case TChessman.N:
+        mchesspieces[index] = ' '
+        break
+      case TChessman.O:
+        mchesspieces[index] = 'o'
+        break
+      case TChessman.X:
+        mchesspieces[index] = 'x'
+        break
+    }
+  })
+    return mchesspieces
+}
 
   public placePiece(num: number, side: TChessman): boolean {
     if (this.chesspieces[num] === TChessman.N) {
@@ -45,13 +38,10 @@ export class Chessboard {
 
   public isOver(): [ boolean, string ] {
     if (this.isWin(TChessman.O)) {
-      this.init()
       return [ true, '游戏结束，o方胜利' ]
     } else if (this.isWin(TChessman.X)) {
-      this.init()
       return [ true, '游戏结束，x方胜利' ]
     } else if (this.isFull()) {
-      this.init()
       return [ true, '游戏结束，平局' ]
     } else {
       return [ false, '游戏继续' ]
@@ -208,7 +198,7 @@ export class Chessboard {
   return [ place, value as number, v ]
 }
 
-  private init() {
+  public init() {
     for (let i = 0; i <= 8; i++) {
       this.chesspieces[i] = TChessman.N
     }
@@ -245,7 +235,7 @@ export class Chessboard {
     }
   }
 
-  private getOpponent(now: TChessman): TChessman {
+  public getOpponent(now: TChessman): TChessman {
     return (now === TChessman.O) ? TChessman.X : TChessman.O
   }
 

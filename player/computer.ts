@@ -2,13 +2,12 @@ import { Chessboard } from '../chessboard'
 import { Player } from './player'
 
 export class ComputerPlayer extends Player {
-  public level: number
+  public level: number = 0
   public init() {
     this.state = false
-    this.level = 2
   }
   public setLevel(s: number) {
-    if (s < 0 || s > 10) {
+    if (s < 0 || s > 3) {
       return false
     }
     this.level = s
@@ -24,7 +23,7 @@ export class ComputerPlayer extends Player {
   }
   public intelligencePlace(level: number) {
     if (this.state) {
-      const [ bestplace, fineplace ] = this.chessboard.outputProbability(this.side, level - 1)
+      const [ bestplace, fineplace ] = this.chessboard.outputProbability(this.side, level)
       let finalPlace: number[]
       if (bestplace.length > 0) {
         finalPlace = bestplace
@@ -41,7 +40,7 @@ export class ComputerPlayer extends Player {
   public placeAccordingToLevel() {
     if (this.level === 0) {
         this.randomPlace()
-    } else if (this.level === 1) {
+    } else if (this.level === 3) {
       // console.log('原先的')
       let places: number[] = []
       let v: number[] = []
