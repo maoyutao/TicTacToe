@@ -27,7 +27,7 @@ export class TTicTacToe extends React.Component<ITicTacToeProps> {
           <CreateNewChessboard />
           <Chessboards />
         </div>
-        <Chessboard />
+        <Chessboard player={this.props.player}/>
       </div>
     )
   }
