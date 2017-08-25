@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { bindActionCreators } from  'redux'
 import { connect } from 'react-redux'
-import { placePieceIfOk } from '../action'
+import { placePieceIfOk } from '../action-creators'
 
 interface IPieceOwnProps {
   id: number,

@@ -18,6 +18,7 @@ export function route(handle: {[key: string]: (req: ServerRequest, res: http.Ser
   if (pathname in handle) {
     req.query = querystring.parse(url.parse(req.url as string).query)
     if (req.method === 'POST') {
+      console.log(req.body)
       let postData: string = ''
       req.on('data', (data: any) => {
         postData += data
@@ -30,6 +31,7 @@ export function route(handle: {[key: string]: (req: ServerRequest, res: http.Ser
       res.write(JSON.stringify({ code: 200 }))
       res.end()
     } else {
+      console.log(req.query)
       handle[pathname](req, res)
     }
   } else if (fs.existsSync(path.join('./public', pathname)))  {

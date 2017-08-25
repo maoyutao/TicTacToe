@@ -6,6 +6,11 @@ export enum TChessman {
   N,
 }
 
+export enum TOpponent {
+  Computer,
+  Human,
+}
+
 export interface IServerRequest {
   query?: any
   body?: any

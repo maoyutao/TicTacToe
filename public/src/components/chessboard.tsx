@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { Piece } from './piece'
 
 interface IChessboardProps {
-  player: string
+  chessboard: string
 }
 
 interface IChessboardState {
@@ -19,7 +19,7 @@ export class Chessboard extends React.Component<IChessboardProps, IChessboardSta
     }
   }
   componentWillReceiveProps(nextProps: IChessboardProps) {
-    if (this.props.player !== nextProps.player) {
+    if (this.props.chessboard !== nextProps.chessboard) {
       this.setState({ 
         strokeDashoffset: this.state.strokeDashoffset+102,
         change: this.state.change + 1,

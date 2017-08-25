@@ -1,20 +1,35 @@
 interface resbody {
   code: number
-  log: string
-  chessboard: string[]
-  allplayers: {[index: string]: object}
-  player: string
-  level?: number
+  chessboardName?: string
+  log?: string
+  chessboard?: string[]
+  allChessboards?: string[]
+  user?: string
+  player1?: string
+  player2?: string
+  viewers?: string[]
+  isPlayer1ready?: boolean
+  isPlayer2ready?: boolean
 }
 interface mstate {
+  chessboardName: string
   log: string
   chessboard: string[]
-  allplayers: {[index: string]: object}
-  player: string
-  level?: number
-  placePiece: { isfetching: boolean }
-  changeChessboard: { isfetching: boolean }
-  restart: { isfetching: boolean }
+  allChessboards: string[]
+  user: string
+  player1: string
+  player2: string
+  isPlayer1ready: boolean
+  isPlayer2ready: boolean
+  viewers: string[]
+  isfetching: {
+    placePiece: boolean 
+    changeChessboard: boolean 
+    restart: boolean 
+    ready: boolean
+    leave: boolean
+    update: boolean
+  }
 }
 
 interface NodeModule {

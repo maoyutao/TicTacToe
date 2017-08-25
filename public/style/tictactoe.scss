@@ -18,13 +18,22 @@ body {
       position: absolute;
       left: 0;
       padding: 0 50px 0;
+      #log {
+        height: 300px;
+        word-break:break-all;
+        overflow: auto;
+      }
       p {
         @extend %largefont;
       }
       .displaybox {
         border: 1px solid;
-        height: 23px;
+        min-height: 23px;
         padding: 2px 5px 2px;
+      }
+      .ready {
+        margin: 0 10px;
+        color: #DA4748;
       }
     }
 
@@ -96,9 +105,13 @@ body {
       }
     }
 
-    #restart  {
-      padding: 5px;
-      margin: 10px 370px;
+    #Buttons {
+      width: 600px;
+      margin: 0 auto;
+      button {
+        padding: 5px;
+        margin: 10px;
+      }
     }
   }
 }

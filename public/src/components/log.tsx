@@ -9,7 +9,9 @@ export class Log extends React.Component<ILog> {
     return (
       <div>
         <p>log:</p>
-        <p dangerouslySetInnerHTML={{__html:this.props.log}}></p>
+        <div id="log">
+          <p dangerouslySetInnerHTML={{__html:this.props.log}}></p>
+        </div>
       </div>
     )
   }

@@ -2,11 +2,11 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { bindActionCreators } from  'redux'
 import { connect } from 'react-redux'
-import { changeChessboardIfOk } from '../action'
+import { changeChessboardIfOk } from '../action-creators'
 
 interface IChessboardsProps {
-  allplayers: {[index: string]: object}
-  onChangeChessboard: (player: string) => (dispatch: (action: any) => void, getState: () => any) => void
+  allChessboards: string[]
+  onChangeChessboard: (chessboardname: string) => (dispatch: (action: any) => void, getState: () => any) => void
 }
 
 class TChessboards extends React.Component<IChessboardsProps> {
@@ -15,16 +15,14 @@ class TChessboards extends React.Component<IChessboardsProps> {
   }
   render() {
     const players: JSX.Element[] = []
-    for (const index in this.props.allplayers) {
-      const content: any = (
-        <button key={index} name="player" onClick={this.onChangeChessboard.bind(this, index)}>
-          { index }
+    this.props.allChessboards.forEach(chessboardname => {
+      const content: JSX.Element = (
+        <button key={chessboardname} name="player" onClick={this.onChangeChessboard.bind(this, chessboardname)}>
+          { chessboardname }
         </button>
       )
-      if (!(content in players)) {
-        players.push(content)
-      }
-    }
+      players.push(content)
+    })
     return (
       <div>
         <p>已有棋盘:</p>
@@ -38,7 +36,7 @@ class TChessboards extends React.Component<IChessboardsProps> {
 
 const mapStateToProps = (state: mstate) => {
   return {
-    allplayers: state.allplayers
+    allChessboards: state.allChessboards
   }
 }
 const mapDispatchToProp = (dispatch: (action: any) => void) => bindActionCreators({

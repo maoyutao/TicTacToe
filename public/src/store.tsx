@@ -17,13 +17,24 @@ const composeEnhancers = (
 ) || compose
 
 const initalState: mstate = {
+  chessboardName: '',
   log: '',
   chessboard: [],
-  allplayers: {},
-  player: '',
-  placePiece: { isfetching: false },
-  changeChessboard: { isfetching: false },
-  restart: { isfetching: false },
+  allChessboards: [],
+  user: '',
+  player1: '',
+  player2: '',
+  viewers: [],
+  isPlayer1ready: false,
+  isPlayer2ready: false,
+  isfetching: {
+    placePiece: false,
+    changeChessboard: false,
+    restart: false,
+    ready: false,
+    leave: false,
+    update: false,
+  }
 }
 
 export const store = createStore<mstate>(reducer, initalState, composeEnhancers(applyMiddleware(thunkMiddleware)))
